@@ -17,9 +17,9 @@
   </head>
   <body class="bg-gray-800 flex items-center justify-center min-h-screen p-5">
     <div
-      class="main-layout-container flex flex-col lg:flex-row items-start justify-center max-w-screen-xl w-full"
+      class="main-layout-container flex flex-col lg:flex-row items-start justify-center max-w-screen-xl w-full lg:gap-6"
     >
-      <div class="separate-receipt-container">
+      <div class="separate-receipt-container lg:w-1/4">
         <div class="separate-receipt-content">
           <div class="separate-receipt-header">
             <div class="separate-receipt-title">S MART</div>
@@ -84,7 +84,7 @@
         </div>
       </div>
 
-      <div class="pos-terminal-frame-wrapper flex flex-col items-center">
+      <div class="pos-terminal-frame-wrapper flex flex-col items-center lg:w-1/2">
         <div
           class="customer-display bg-gray-900 text-green-400 rounded-lg shadow-lg p-4 mb-4 w-full max-w-4xl text-right"
         >
@@ -269,6 +269,26 @@
           >
             <i class="fas fa-cash-register mr-2"></i> ELECTRONIC CASH DRAWER
           </div>
+        </div>
+      </div>
+
+      <!-- NEW Banking App Container -->
+      <div id="banking-app-container" class="bg-black text-white p-4 rounded-2xl shadow-xl lg:w-1/4 mt-4 lg:mt-0 flex flex-col h-[700px] max-w-sm overflow-hidden">
+        <h2 class="text-xl font-bold mb-4 text-white text-center">My Banking App</h2>
+        <div id="banking-app-transactions-list" class="overflow-y-auto flex-grow pr-2">
+          <p id="banking-app-empty-message" class="text-gray-400 text-center p-4">No transactions yet.</p>
+          <!--
+          <div class="transaction-item bg-gray-800 p-3 rounded-md mb-2 shadow">
+              <div class="flex justify-between items-center">
+                  <span class="font-semibold text-white">S Mart</span>
+                  <span class="text-red-400 font-bold">-€25.50</span>
+              </div>
+              <div class="text-xs text-gray-400 mt-1">
+                  <span>07/26/2024, 10:30 AM</span> | <span>Receipt: #20230726-1234</span>
+              </div>
+              <div class="text-xs text-gray-500 mt-1">Items: Apple, Milk, Bread</div>
+          </div>
+          -->
         </div>
       </div>
     </div>

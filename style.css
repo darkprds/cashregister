@@ -137,7 +137,8 @@ body {
 
 /* Receipt specific styles (for the separate receipt view, copied from original) */
 .separate-receipt-container {
-  width: 350px; /* Fixed width for receipt paper look */
+  /* width: 350px; /* Fixed width for receipt paper look */ /* Replaced by Tailwind lg:w-1/4 and max-width below */
+  max-width: 350px; /* Max width for receipt paper look */
   background: white;
   border-radius: 5px;
   padding: 20px;
@@ -147,7 +148,7 @@ body {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
   min-height: 500px; /* Ensure it has some height */
   flex-shrink: 0; /* Prevent it from shrinking */
-  margin-right: 2.5rem; /* Gap between receipt and POS terminal */
+  /* margin-right: 2.5rem; /* Replaced by gap on parent container */
 }
 .separate-receipt-container:before {
   content: "";
@@ -338,4 +339,33 @@ body {
   .cart-panel {
     padding-top: 1.5rem; /* Add some top padding when stacked */
   }
+}
+
+/* Banking App Transaction List Scrollbar */
+#banking-app-transactions-list::-webkit-scrollbar {
+  width: 6px;
+}
+#banking-app-transactions-list::-webkit-scrollbar-thumb {
+  background-color: #555; /* Darker gray for thumb */
+  border-radius: 3px;
+}
+#banking-app-transactions-list::-webkit-scrollbar-track {
+  background-color: #1c1c1e; /* Match banking app's intended dark background */
+}
+
+/* Styling for individual transaction items (to be applied dynamically) */
+.transaction-item-card {
+  background-color: #2c2c2e; /* Slightly lighter than bg-black */
+  padding: 0.75rem 1rem; /* p-3 or p-4 like, Tailwind p-3 is 0.75rem, p-4 is 1rem */
+  margin-bottom: 0.75rem; /* mb-3 */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* subtle shadow */
+}
+
+.transaction-item-card .amount-expense {
+  color: #f87171; /* Tailwind red-400 for expenses */
+}
+
+.transaction-item-card .amount-income {
+  color: #4ade80; /* Tailwind green-400 for income */
 }

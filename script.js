@@ -1,3 +1,6 @@
+// Banking App Global Transactions Array
+let bankingTransactions = [];
+
 // Register state
 const state = {
   subtotal: 0,
@@ -52,6 +55,10 @@ const modalAmount = document.getElementById("modal-amount");
 const cashPayment = document.getElementById("cash-payment");
 const cardPayment = document.getElementById("card-payment");
 const messageBox = document.getElementById("message-box");
+
+// Banking App DOM Elements
+const bankingAppTransactionsList = document.getElementById('banking-app-transactions-list');
+const bankingAppEmptyMessage = document.getElementById('banking-app-empty-message');
 
 // Tax rate constant (10%)
 const TAX_RATE = 0.1;
@@ -284,6 +291,22 @@ cardPayment.addEventListener("click", () => {
   showMessage("Payment processed: CARD");
   paymentModal.classList.remove("active");
   paymentModal.querySelector(".payment-content").classList.add("translate-y-5");
+
+  // --- NEW BANKING APP INTEGRATION CODE ---
+  const newTransaction = {
+    storeName: "S Mart",
+    // Create a deep enough copy for items array and each item object
+    items: state.items.map(item => ({ name: item.name, price: item.price, code: item.code })),
+    amount: state.total, // This will be negative in banking context, handled by render function
+    paymentMethod: "CARD",
+    receiptNo: separateReceiptNo.textContent,
+    date: separateReceiptDate.textContent,
+    time: separateReceiptTime.textContent
+  };
+
+  bankingTransactions.unshift(newTransaction);
+  renderBankingAppTransactions();
+  // --- END OF NEW BANKING APP INTEGRATION CODE ---
 });
 
 // Close payment modal when clicking outside
@@ -341,4 +364,47 @@ document.addEventListener("DOMContentLoaded", () => {
     discountBtn.classList.add("orange");
     calculateTotals();
   }, 1000);
+
+  renderBankingAppTransactions(); // Initialize banking app display
 });
+
+// Function to render transactions in the banking app
+function renderBankingAppTransactions() {
+  bankingAppTransactionsList.innerHTML = ''; // Clear existing list
+
+  if (bankingTransactions.length === 0) {
+    if (bankingAppEmptyMessage) { // Ensure element exists
+        bankingAppEmptyMessage.style.display = 'block';
+    }
+  } else {
+    if (bankingAppEmptyMessage) { // Ensure element exists
+        bankingAppEmptyMessage.style.display = 'none';
+    }
+
+    bankingTransactions.forEach(transaction => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'transaction-item-card'; // Styled in style.css
+
+      const itemsString = transaction.items.map(item => item.name).join(', ');
+      const amountClass = transaction.amount > 0 ? 'amount-income' : 'amount-expense'; // Assuming positive is income, negative is expense for banking app context
+      const amountSign = transaction.amount > 0 ? '+' : '-'; // Or based on transaction type
+
+      itemDiv.innerHTML = `
+        <div class="flex justify-between items-center">
+            <span class="font-semibold text-white">${transaction.storeName}</span>
+            <span class="font-bold ${amountClass}">${amountSign}€${Math.abs(transaction.amount).toFixed(2)}</span>
+        </div>
+        <div class="text-xs text-gray-400 mt-1">
+            <span>${transaction.date}, ${transaction.time}</span> | <span>Receipt: ${transaction.receiptNo}</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-1">
+            Items: ${itemsString}
+        </div>
+        <div class="text-xs text-gray-500 mt-1">
+            Payment: ${transaction.paymentMethod}
+        </div>
+      `;
+      bankingAppTransactionsList.prepend(itemDiv); // Prepend to show newest first
+    });
+  }
+}
