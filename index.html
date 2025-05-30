@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>S Mart - POS Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-gray-800 flex items-center justify-center min-h-screen p-5">
+    <div
+      class="main-layout-container flex flex-col lg:flex-row items-start justify-center max-w-screen-xl w-full"
+    >
+      <div class="separate-receipt-container">
+        <div class="separate-receipt-content">
+          <div class="separate-receipt-header">
+            <div class="separate-receipt-title">S MART</div>
+            <div class="separate-receipt-subtitle">GROCERY & SUPERMARKET</div>
+            <div class="separate-receipt-info">
+              123 Mariahilfer Straße<br />
+              1060 Vienna, Austria<br />
+              +43 1 123 4567<br />
+              <span id="separate-receipt-date"></span>
+              <span id="separate-receipt-time"></span>
+            </div>
+          </div>
+
+          <div class="separate-receipt-divider"></div>
+
+          <div class="separate-receipt-items" id="separate-receipt-items-list">
+            <div
+              id="empty-separate-receipt"
+              style="text-align: center; padding: 20px 0; color: #999"
+            >
+              No items added yet. Scan products to begin.
+            </div>
+          </div>
+
+          <div class="separate-receipt-divider"></div>
+
+          <div class="separate-receipt-totals">
+            <div class="separate-receipt-row">
+              <div>SUBTOTAL:</div>
+              <div id="separate-receipt-subtotal">€0.00</div>
+            </div>
+            <div class="separate-receipt-row">
+              <div>DISCOUNT (10%):</div>
+              <div id="separate-receipt-discount">€0.00</div>
+            </div>
+            <div class="separate-receipt-row">
+              <div>TAX (10%):</div>
+              <div id="separate-receipt-tax">€0.00</div>
+            </div>
+            <div class="separate-receipt-emphasis separate-receipt-row">
+              <div>TOTAL:</div>
+              <div id="separate-receipt-total">€0.00</div>
+            </div>
+          </div>
+
+          <div
+            class="separate-receipt-payment"
+            id="separate-receipt-payment-status"
+          >
+            PAYMENT: NOT PROCESSED
+          </div>
+
+          <div class="separate-receipt-footer">
+            Thank you for shopping at S Mart!<br />
+            Returns accepted within 14 days with receipt<br />
+            Store Hours: Mon-Sat 8AM-10PM, Sun 9AM-8PM<br />
+            www.s-mart-groceries.com
+            <div style="margin-top: 10px; font-size: 10px">
+              RECEIPT NO: <span id="separate-receipt-no">#</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pos-terminal-frame-wrapper flex flex-col items-center">
+        <div
+          class="customer-display bg-gray-900 text-green-400 rounded-lg shadow-lg p-4 mb-4 w-full max-w-4xl text-right"
+        >
+          <div class="text-xs text-gray-400 mb-1">CUSTOMER VIEW</div>
+          <div
+            class="customer-display-item text-lg font-mono"
+            id="customer-display-item"
+          ></div>
+          <div
+            class="customer-display-total text-5xl font-bold font-mono"
+            id="customer-display-total"
+          >
+            €0.00
+          </div>
+        </div>
+
+        <div
+          class="pos-terminal-frame bg-gray-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center p-4 max-w-4xl w-full"
+        >
+          <div
+            class="pos-screen bg-white rounded-lg w-full flex flex-col lg:flex-row flex-grow min-h-[700px] shadow-inner border border-gray-700"
+          >
+            <div
+              class="product-panel p-6 flex-1 lg:w-2/3 border-r border-gray-200 flex flex-col"
+            >
+              <div
+                class="current-transaction-display mb-6 bg-gray-100 p-4 rounded-md shadow-sm"
+              >
+                <div
+                  class="flex justify-between items-center text-sm text-gray-600 mb-2"
+                >
+                  <span class="font-medium">S MART Vienna</span>
+                  <span id="item-count-display" class="font-medium"
+                    >ITEMS: 0</span
+                  >
+                </div>
+                <div
+                  id="main-total-display"
+                  class="text-right text-5xl font-extrabold text-gray-900 leading-tight"
+                >
+                  €0.00
+                </div>
+              </div>
+
+              <div
+                class="flex-1 overflow-y-auto pr-2 grid grid-cols-2 sm:grid-cols-3 gap-4 scrollable-list"
+              >
+                <button
+                  class="item-pos-btn"
+                  data-item="Apple"
+                  data-price="0.99"
+                >
+                  <span class="text-sm font-semibold">Apple</span>
+                  <span class="text-green-600 text-lg font-bold">€0.99</span>
+                </button>
+                <button
+                  class="item-pos-btn"
+                  data-item="Banana"
+                  data-price="0.49"
+                >
+                  <span class="text-sm font-semibold">Banana</span>
+                  <span class="text-green-600 text-lg font-bold">€0.49</span>
+                </button>
+                <button class="item-pos-btn" data-item="Milk" data-price="3.49">
+                  <span class="text-sm font-semibold">Milk</span>
+                  <span class="text-green-600 text-lg font-bold">€3.49</span>
+                </button>
+                <button
+                  class="item-pos-btn"
+                  data-item="Bread"
+                  data-price="2.99"
+                >
+                  <span class="text-sm font-semibold">Bread</span>
+                  <span class="text-green-600 text-lg font-bold">€2.99</span>
+                </button>
+                <button class="item-pos-btn" data-item="Eggs" data-price="4.29">
+                  <span class="text-sm font-semibold">Eggs</span>
+                  <span class="text-green-600 text-lg font-bold">€4.29</span>
+                </button>
+                <button
+                  class="item-pos-btn"
+                  data-item="Butter"
+                  data-price="4.49"
+                >
+                  <span class="text-sm font-semibold">Butter</span>
+                  <span class="text-green-600 text-lg font-bold">€4.49</span>
+                </button>
+                <button
+                  class="item-pos-btn"
+                  data-item="Chicken"
+                  data-price="8.99"
+                >
+                  <span class="text-sm font-semibold">Chicken</span>
+                  <span class="text-green-600 text-lg font-bold">€8.99</span>
+                </button>
+                <button
+                  class="item-pos-btn"
+                  data-item="Beef"
+                  data-price="12.99"
+                >
+                  <span class="text-sm font-semibold">Beef</span>
+                  <span class="text-green-600 text-lg font-bold">€12.99</span>
+                </button>
+                <button
+                  class="item-pos-btn bg-blue-100 text-blue-800"
+                  data-item="Coffee"
+                  data-price="2.50"
+                >
+                  <span class="text-sm font-semibold">Coffee</span>
+                  <span class="text-blue-600 text-lg font-bold">€2.50</span>
+                </button>
+                <button
+                  class="item-pos-btn bg-purple-100 text-purple-800"
+                  data-item="Soda"
+                  data-price="1.80"
+                >
+                  <span class="text-sm font-semibold">Soda</span>
+                  <span class="text-purple-600 text-lg font-bold">€1.80</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="cart-panel bg-gray-50 p-6 lg:w-1/3 flex flex-col">
+              <div class="text-lg font-bold text-gray-800 mb-4 text-center">
+                CURRENT ORDER
+              </div>
+
+              <div
+                id="cart-items-list"
+                class="flex-1 overflow-y-auto pr-2 mb-4 scrollable-list"
+              >
+                <div
+                  id="empty-cart-message"
+                  class="text-center text-gray-400 py-10"
+                >
+                  No items in cart.<br />Tap products to add.
+                </div>
+              </div>
+
+              <div
+                class="cart-summary border-t border-gray-200 pt-4 text-gray-700"
+              >
+                <div class="flex justify-between mb-1">
+                  <span>Subtotal:</span>
+                  <span id="cart-subtotal">€0.00</span>
+                </div>
+                <div class="flex justify-between mb-1">
+                  <span>Discount (10%):</span>
+                  <span id="cart-discount">€0.00</span>
+                </div>
+                <div class="flex justify-between mb-1">
+                  <span>Tax (10%):</span>
+                  <span id="cart-tax">€0.00</span>
+                </div>
+                <div
+                  class="flex justify-between text-xl font-bold text-gray-900 mt-2"
+                >
+                  <span>TOTAL:</span>
+                  <span id="cart-total">€0.00</span>
+                </div>
+              </div>
+
+              <div class="action-buttons-grid grid grid-cols-2 gap-3 mt-6">
+                <button class="pos-btn red p-3" id="clear-btn">
+                  <i class="fas fa-times mr-2"></i> CLEAR
+                </button>
+                <button class="pos-btn blue p-3" id="discount-btn">
+                  <i class="fas fa-tag mr-2"></i> DISCOUNT 10%
+                </button>
+                <button
+                  class="pos-btn green col-span-2 p-4 text-2xl"
+                  id="pay-btn"
+                >
+                  <i class="fas fa-euro-sign mr-3"></i> PAY
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="cash-drawer bg-gray-700 w-full h-16 rounded-b-2xl mt-4 flex items-center justify-center text-white text-sm font-medium shadow-md"
+          >
+            <i class="fas fa-cash-register mr-2"></i> ELECTRONIC CASH DRAWER
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="payment-modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300"
+      id="payment-modal"
+    >
+      <div
+        class="payment-content bg-white rounded-xl w-80 p-6 text-center shadow-2xl transform translate-y-5 transition-transform duration-400"
+      >
+        <div class="text-gray-800 text-3xl font-bold mb-4">PAYMENT METHOD</div>
+        <div class="text-gray-600 text-lg">S MART Vienna</div>
+        <div
+          class="text-red-600 text-5xl font-bold my-4 font-mono"
+          id="modal-amount"
+        >
+          €0.00
+        </div>
+        <div class="text-gray-700 mb-5">Select payment method:</div>
+        <div class="flex justify-center gap-5">
+          <button
+            class="pos-btn green py-4 px-6 rounded-full text-lg"
+            id="cash-payment"
+          >
+            <i class="fas fa-money-bill-wave"></i> CASH
+          </button>
+          <button
+            class="pos-btn blue py-4 px-6 rounded-full text-lg"
+            id="card-payment"
+          >
+            <i class="fas fa-credit-card"></i> CARD
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="message-box" class="hidden"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
